@@ -22,6 +22,15 @@ public class LevelManager : MonoBehaviour
 	{
 		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
 	}
+
+	public void BrickDestroy()
+	{
+		if(Brick.breakableBrick <= 0)
+		{
+			LoadNextLevel();
+		}
+
+	}
 		
 
 }
