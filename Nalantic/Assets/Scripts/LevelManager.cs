@@ -1,36 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using System.Collections;
 
 public class LevelManager : MonoBehaviour 
 {
 
 	public void LoadLevel(string name)
 	{
-		Application.LoadLevel(name);
-
+		Debug.Log ("New Level load: " + name);
+		Brick.breakableCount = 0;
+		Application.LoadLevel (name);
 	}
 
 	public void QuitRequest()
 	{
-		Debug.Log("Quit Is Pressed");
-		Application.Quit();
+		//Debug.Log ("Quit requested");
+		Application.Quit ();
 	}
-		
-	public void LoadNextLevel()
+	
+	public void LoadNextLevel() 
 	{
-		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+		Brick.breakableCount = 0;
+		Application.LoadLevel(Application.loadedLevel + 1);
 	}
-
-	public void BrickDestroy()
+	
+	public void BrickDestoyed() 
 	{
-		if(Brick.breakableBrick <= 0)
+		if (Brick.breakableCount <= 0) 
 		{
 			LoadNextLevel();
 		}
-
 	}
-		
-
 }

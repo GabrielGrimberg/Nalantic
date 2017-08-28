@@ -1,81 +1,89 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class Brick : MonoBehaviour 
 {
+
+	public AudioClip crack;
 	public Sprite[] hitSprites;
+	public static int breakableCount = 0;
+	public GameObject smoke;
+
 	private int timesHit;
 	private LevelManager levelManager;
-	public static int breakableBrick = 0;
 	private bool isBreakable;
-
+	
 	// Use this for initialization
-	void Start() 
+	void Start () 
 	{
 		isBreakable = (this.tag == "Breakable");
 
-		//Keep track of breakable bricks.
-		if(isBreakable)
+		// Keep track of breakable bricks
+		if (isBreakable) 
 		{
-			breakableBrick++;
+			breakableCount++;
 		}
-
+		
 		timesHit = 0;
 		levelManager = GameObject.FindObjectOfType<LevelManager>();
-
 	}
 	
 	// Update is called once per frame
-	void Update() 
+	void Update () 
 	{
-		
+	
 	}
-
-	void OnCollisionExit2D(Collision2D col)
+	
+	void OnCollisionEnter2D (Collision2D col) 
 	{
-		if(isBreakable)
+		AudioSource.PlayClipAtPoint (crack, transform.position, 0.8f);
+		if (isBreakable) 
 		{
-			HitsHandle();
+			HandleHits();
 		}
 	}
-
-	void HitsHandle()
+	
+	void HandleHits () 
 	{
-		print("Hit");
 		timesHit++;
-
 		int maxHits = hitSprites.Length + 1;
-		if(timesHit >= maxHits)
+
+		if (timesHit >= maxHits) 
 		{
-			breakableBrick--;
-			levelManager.BrickDestroy(); //Checks if last brick is destoryed.
+			breakableCount--;
+			levelManager.BrickDestoyed();
+			PuffSmoke();
 			Destroy(gameObject);
-		}
-		else
+		} 
+		else 
 		{
 			LoadSprites();
-
 		}
-
 	}
-
-	void LoadSprites()
+	
+	void PuffSmoke () 
+	{
+		GameObject smokePuff = Instantiate (smoke, transform.position, Quaternion.identity) as GameObject;
+		smokePuff.GetComponent<ParticleSystem>().startColor = gameObject.GetComponent<SpriteRenderer>().color;
+	}
+	
+	void LoadSprites () 
 	{
 		int spriteIndex = timesHit - 1;
-
-		if(hitSprites[spriteIndex])
+		
+		if (hitSprites[spriteIndex] != null) 
 		{
 			this.GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+		} 
+		else 
+		{
+			Debug.LogError ("Brick sprite missing");
 		}
-
 	}
-
-	//TODO Remove this method once we can actually win.
-	void SimulateWin()
+	
+	// TODO Remove this method once we can actually win!
+	void SimulateWin () 
 	{
 		levelManager.LoadNextLevel();
-
 	}
-
 }

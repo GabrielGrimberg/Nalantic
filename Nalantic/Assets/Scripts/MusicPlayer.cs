@@ -1,36 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class MusicPlayer : MonoBehaviour 
 {
-	//No multiple music playing.
 	static MusicPlayer instance = null;
-
-	void Awake()
-	{
-		if(instance != null)
-		{
-			Destroy(gameObject);
-		}
-		else
-		{
-			instance = this;
-			//Takes a GameObject instance and doesn't destroy on load.
-			GameObject.DontDestroyOnLoad(gameObject);
-		}
-
-	}
-
+	
 	// Use this for initialization
 	void Start () 
 	{
+		if (instance != null) 
+		{
+			Destroy (gameObject);
+			//print ("Duplicate music player self-destructing!");
+		} 
+		else 
+		{
+			instance = this;
+			GameObject.DontDestroyOnLoad(gameObject);
+		}
 		
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		
+	
 	}
 }

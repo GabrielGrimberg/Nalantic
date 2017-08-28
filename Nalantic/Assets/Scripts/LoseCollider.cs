@@ -1,20 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class LoseCollider : MonoBehaviour 
 {
-	private LevelManager levelManager;
 
-	void OnTriggerEnter2D(Collider2D trigger)
+	private LevelManager levelManager;
+	
+	void OnTriggerEnter2D (Collider2D trigger) 
 	{
 		levelManager = GameObject.FindObjectOfType<LevelManager>();
-		levelManager.LoadLevel("Lose");
-			
+		levelManager.LoadLevel("Lose Screen");
 	}
-
-	void OnCollisionEnter2D(Collision2D collision)
+	
+	void OnCollisionEnter2D (Collision2D collision) 
 	{
-
+		//print ("Collision");	
 	}
+	
 }

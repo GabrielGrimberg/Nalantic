@@ -1,28 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class Paddle : MonoBehaviour 
 {
 
-	// Use this for initialization
+	public bool autoPlay = false;
+	public float minX, maxX;
+
+	private Ball ball;
+	
 	void Start () 
 	{
-		
+		ball = GameObject.FindObjectOfType<Ball>();
 	}
-	
+		
 	// Update is called once per frame
 	void Update () 
 	{
-		//Struct of x,y,z
-		Vector3 paddlePos = new Vector3(0.5f, this.transform.position.y ,0f);
-
-		float mousePosInBlocks = Input.mousePosition.x / Screen.width * 16;
-
-		//Clmap used to make the object not go out of bounds.
-		paddlePos.x = Mathf.Clamp(mousePosInBlocks, 0.5f, 15.5f);
-
+		if (!autoPlay) 
+		{
+			MoveWithMouse();
+		} 
+		else 
+		{
+			AutoPlay();
+		}
+	}
+	
+	void AutoPlay() 
+	{
+		Vector3 paddlePos = new Vector3 (0.5f, this.transform.position.y, 0f);
+		Vector3 ballPos = ball.transform.position;
+		paddlePos.x = Mathf.Clamp(ballPos.x, minX, maxX);
 		this.transform.position = paddlePos;
-		
+	}
+	
+	void MoveWithMouse () 
+	{
+		Vector3 paddlePos = new Vector3 (0.5f, this.transform.position.y, 0f);
+		float mousePosInBlocks = Input.mousePosition.x / Screen.width * 16;
+		paddlePos.x = Mathf.Clamp(mousePosInBlocks, minX, maxX);
+		this.transform.position = paddlePos;
 	}
 }
